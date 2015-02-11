@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="{{ url_for('static', filename='js/jquery-2.1.3.min.js') }}"></script>
+    <script>
+    $(function() {
+        var data = {};
+        ws = new WebSocket("ws://localhost:5000/chat");
+        ws.onmessage = function(e) {
+            $('#holder').append($('<p>' + e.data + '</p>'));
+            var received_msg = e.data;
+        };
+        ws.onopen = function() {
+            ws.send('hi');
+        };
+        $('#sender').append($('<button/>').text('send').click(function() {
+            ws.send($('#message').val());
+        }));
+    });
+    </script>
+</head>
+<body>
+<div id="sender">
+    <input type="text" id="message" value="text" />
+</div>
+<h3>Messages</h3>
+<div id="holder"></div>
+</body>
+</html>
